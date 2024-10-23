@@ -1,0 +1,12 @@
+{
+  "files.associations": {
+    "*.js": "javascriptreact",
+    "stdexcept": "cpp",
+    "list": "cpp",
+    "__split_buffer": "cpp",
+    "deque": "cpp",
+    "string": "cpp",
+    "vector": "cpp",
+    "set": "cpp"
+  }
+}
