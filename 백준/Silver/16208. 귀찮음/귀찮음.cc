@@ -7,7 +7,7 @@ int main() {
     cin.tie(NULL);
     ios::sync_with_stdio(false);
 
-    int n, totalCost = 0;
+    long long n, totalCost = 0;
     cin >> n;
 
     priority_queue<int, vector<int>, greater<int>> pq;
@@ -19,12 +19,12 @@ int main() {
     }
 
     while (pq.size() > 1) {
-        int cost;
-        
-        int a = pq.top();
+        long long cost;
+
+        long long a = pq.top();
         pq.pop();
 
-        int b = pq.top();
+        long long b = pq.top();
         pq.pop();
 
         cost = a * b;
