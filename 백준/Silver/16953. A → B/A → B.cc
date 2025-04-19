@@ -1,45 +1,38 @@
 #include <iostream>
-#include <queue>
+#include <string>
 
 using namespace std;
-
-long long b;
-
-void bfs(long long a) {
-    // 숫자, 횟수
-    queue<pair<long long, int>> q;
-    q.push({a, 1});
-
-    while(!q.empty()) {
-        long long qx_num = q.front().first;
-        int qx_cnt = q.front().second;
-
-        q.pop();
-
-        if (qx_num == b) {
-            cout << qx_cnt << '\n';
-            return;
-        }
-        
-        if (qx_num < b) {
-            q.push({qx_num * 2, qx_cnt + 1});
-            q.push({(qx_num * 10) + 1, qx_cnt + 1});    
-        }
-    }
-
-    cout << "-1" << '\n';
-}
 
 int main() {
     cin.tie(NULL);
     ios::sync_with_stdio(false);
 
     int cnt = 0;
+    long long a, b;
 
-    long long  a;
     cin >> a >> b;
 
-    bfs(a);
+    while(1) {
+        // 같으면 종료
+        if (a == b) break; 
+
+        if ((a * 2) > b) {
+            cout << "-1" << '\n';
+            return 0;
+        }
+
+        if (b % 2 == 0) {
+            b /= 2;
+            cnt++;
+        } else if (b % 10 == 1) {
+            b = (b - 1) / 10;
+            cnt++;
+        } else {
+            cout << "-1" << '\n';
+            return 0;
+        }
+    }
+    cout << cnt+1 << '\n';
        
     return 0;
 }
