@@ -18,9 +18,11 @@ vector<string> split(string input, char dlim) {
     stringstream s;
     string stringBuffer;
     
-    s.str(input);
+    s.str(input); // stringstream에 input 넣고
 
+    // s에서 "."을 기준으로 잘라서 stringBuffer에 저장
     while (getline(s, stringBuffer, dlim)) {
+        // 잘라낸 문자열을 vector에 저장
         result.push_back(stringBuffer);
     }
     
@@ -45,12 +47,17 @@ int main() {
     vector<vector<int>> v(tc);
 
     for (int i = 0; i < s.size(); i++) {
+        // ex) s[0] = "192.168.0.1"
+
         vector<string> result = split(s[i], '.');
+        // ex) result = ["192", "168", "0", "1"]
 
         for (int j = 0; j < result.size(); j++) {
-            int t = stoi(result[j]);
-            v[i].push_back(t);
+            int t = stoi(result[j]); // 문자열을 정수고 변환하고
+            v[i].push_back(t); // 벡터에 삽입
         }
+        // ex) v[0] = {192, 168, 0, 1}
+
     }
 
     // 입력받은 주소가 1개일 경우
@@ -66,19 +73,24 @@ int main() {
 
     // 2. 각각의 주소값을 2진수로 변환해서 a[32], b[32]에 저장하고
     int vv = v.size() - 1;
-    int a[32], b[32];
+
+    // ip = XXXX.XXXX.XXXX.XXXX
+    // 각 자리의 바이트는 xxxx xxxx . xxxx xxxx . xxxx xxxx . xxxx xxxx 이므로
+    int a[32], b[32]; // 가장 작은 IP(v[0]), 가장 큰 IP(v[vv])
 
     for (int i = 0; i < 4; i++) {
         int aa = 128, bb = 128;
 
         for (int j = 0; j < 8; j++) {
             if (v[0][i] >= aa) {
+                // i에 8을 곱하는 이유는 각 자리당 8바이트이므로 다음 자리로 넘어가기 위함!
                 a[j + i * 8] = 1;
                 v[0][i] -= aa;
             } else {
                 a[j + i * 8] = 0;
             }
 
+            // 128 -> 64 -> ... -> 1
             aa /= 2;
 
             if (v[vv][i] >= bb) {
@@ -88,6 +100,7 @@ int main() {
                 b[j + i * 8] = 0;
             }
 
+            // 128 -> 64 -> ... -> 1
             bb /= 2;
         }
     }
