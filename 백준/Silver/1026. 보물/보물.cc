@@ -4,11 +4,6 @@
 
 using namespace std;
 
-// 내림차순으로 맹글어
-bool compare(int a, int b) {
-    return b < a;
-}
-
 int main() {
     cin.tie(NULL);
     ios_base::sync_with_stdio(false);
@@ -29,7 +24,7 @@ int main() {
         cin >> b[i];
     }
 
-    sort(b.begin(), b.end(), compare);
+    sort(b.begin(), b.end(), greater<>());
 
     for (int i = 0; i < n; i++) {
         s += a[i] * b[i];
