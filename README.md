@@ -2,6 +2,9 @@
 
 ## 백준
 
+[![Solved.ac
+프로필](http://mazassumnida.wtf/api/generate_badge?boj=heejin094)](https://solved.ac/heejin094)
+
 ### Platinum
 
 - [11003. 최솟값 찾기](https://github.com/gmlwlsdl/Algorithm/tree/main/백준/Platinum/11003. 최솟값 찾기)
