@@ -1,0 +1,18 @@
+# macOS
+.DS_Store
+
+# VSCode
+.vscode/
+
+# C++ build artifacts
+*.o
+*.out
+*.exe
+main
+main.CPP
+
+# dSYM files (debugging symbols)
+*.dSYM/
+
+# Custom files
+CPP/test
