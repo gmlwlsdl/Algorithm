@@ -4,7 +4,7 @@ from google import genai
 
 # 최신 SDK 클라이언트 설정
 client = genai.Client(api_key=os.environ["GEMINI_API_KEY"])
-MODEL_ID = "gemini-1.5-flash"
+MODEL_ID = "gemini-2.5-flash"
 
 def get_target_files():
     """분석할 C++ 파일을 결정합니다."""
