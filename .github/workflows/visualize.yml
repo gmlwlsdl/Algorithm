@@ -38,11 +38,7 @@ jobs:
           if [[ "${{ github.event_name }}" == "workflow_dispatch" && "${{ inputs.mode }}" == "latest" ]]; then
             echo "Manual mode: latest file"
 
-            FILE=$(git ls-files '*.cc' '*.cpp' \
-              | xargs -I{} stat -c "%Y %n" {} \
-              | sort -nr \
-              | head -1 \
-              | cut -d' ' -f2-)
+            FILE=$(git log -1 --name-only --pretty=format: -- '*.cc' '*.cpp' | head -1)
 
             echo "files<<EOF" >> $GITHUB_OUTPUT
             echo "$FILE" >> $GITHUB_OUTPUT

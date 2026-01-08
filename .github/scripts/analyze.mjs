@@ -1,6 +1,5 @@
 import fs from 'fs'
 import path from 'path'
-import fetch from 'node-fetch'
 
 const files = process.argv[2]?.split('\n').filter(Boolean)
 const API_KEY = process.env.GEMINI_API_KEY
