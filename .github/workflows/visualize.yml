@@ -32,6 +32,10 @@ jobs:
         with:
           node-version: 20
 
+      - name: Configure git to keep UTF-8 paths
+        run: |
+          git config --global core.quotepath false
+
       - name: Resolve target C++ files
         id: resolve
         run: |
