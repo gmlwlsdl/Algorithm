@@ -17,6 +17,9 @@ on:
           - latest
           - diff
 
+permissions:
+  contents: write
+
 jobs:
   analysis:
     runs-on: ubuntu-latest
