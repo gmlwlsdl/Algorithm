@@ -1,9 +1,10 @@
 name: Auto Analysis with Gemini
-on: workflow_dispatch:
+on:
   push:
     paths:
       - '**.cc'
       - '**.cpp'
+  workflow_dispatch:
 
 jobs:
   build:
