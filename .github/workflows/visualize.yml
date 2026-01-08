@@ -1,41 +1,72 @@
-name: Auto Analysis with Gemini
+name: Auto Generate Algorithm Analysis
+
 on:
   push:
     paths:
-      - '**.cc'
-      - '**.cpp'
+      - '**/*.cc'
+      - '**/*.cpp'
+
   workflow_dispatch:
+    inputs:
+      mode:
+        description: 'Execution mode'
+        required: false
+        default: 'latest'
+        type: choice
+        options:
+          - latest
+          - diff
 
 jobs:
-  build:
+  analysis:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write # 봇이 파일을 커밋할 수 있도록 허용
+
     steps:
-      - name: Checkout
+      - name: Checkout repository
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      - name: Set up Python
-        uses: actions/setup-python@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
-          python-version: '3.11'
+          node-version: 20
 
-      - name: Install dependencies
+      - name: Resolve target C++ files
+        id: resolve
         run: |
-          python -m pip install --upgrade pip
-          pip install google-genai
+          if [[ "${{ github.event_name }}" == "workflow_dispatch" && "${{ inputs.mode }}" == "latest" ]]; then
+            echo "Manual mode: latest file"
 
-      - name: Run analysis
+            FILE=$(git ls-files '*.cc' '*.cpp' \
+              | xargs -I{} stat -f "%m %N" {} \
+              | sort -nr \
+              | head -1 \
+              | cut -d' ' -f2-)
+
+            echo "files<<EOF" >> $GITHUB_OUTPUT
+            echo "$FILE" >> $GITHUB_OUTPUT
+            echo "EOF" >> $GITHUB_OUTPUT
+
+          else
+            echo "Auto mode: diff files"
+
+            echo "files<<EOF" >> $GITHUB_OUTPUT
+            git diff --name-only HEAD~1 HEAD | grep -E '\.(cc|cpp)$' || true
+            echo "EOF" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Generate analysis with Gemini
+        if: steps.resolve.outputs.files != ''
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-        run: python .github/scripts/analyze.py
-
-      - name: Commit and Push
         run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          node scripts/analysis.mjs "${{ steps.resolve.outputs.files }}"
+
+      - name: Commit analysis files
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
           git add .
-          git commit -m "docs: generate algorithm analysis [skip ci]" || echo "No changes"
+          git commit -m "docs: auto-generate algorithm analysis" || echo "No changes"
           git push
