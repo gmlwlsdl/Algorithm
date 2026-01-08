@@ -57,7 +57,7 @@ jobs:
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
         run: |
-          node .github/scripts/analyze.mjs "${{ steps.resolve.outputs.files }}"
+          node .github/scripts/analyze.mjs ${{ steps.resolve.outputs.files }}
 
       - name: Commit analysis files
         run: |
