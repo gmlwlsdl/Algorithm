@@ -39,7 +39,7 @@ jobs:
             echo "Manual mode: latest file"
 
             FILE=$(git ls-files '*.cc' '*.cpp' \
-              | xargs -I{} stat -f "%m %N" {} \
+              | xargs -I{} stat -c "%Y %n" {} \
               | sort -nr \
               | head -1 \
               | cut -d' ' -f2-)
@@ -61,7 +61,7 @@ jobs:
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
         run: |
-          node scripts/analysis.mjs "${{ steps.resolve.outputs.files }}"
+          node .github/scripts/analyze.mjs "${{ steps.resolve.outputs.files }}"
 
       - name: Commit analysis files
         run: |
