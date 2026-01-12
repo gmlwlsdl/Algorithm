@@ -55,7 +55,7 @@ jobs:
             echo "Auto mode: diff files"
 
             echo "files<<EOF" >> $GITHUB_OUTPUT
-            git diff --name-only HEAD~1 HEAD | grep -E '\.(cc|cpp)$' || true
+            git diff --name-only HEAD~1 HEAD | grep -E '\.(cc|cpp)$' >> $GITHUB_OUTPUT || true
             echo "EOF" >> $GITHUB_OUTPUT
           fi
 
