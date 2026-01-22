@@ -1,7 +1,5 @@
 #include <iostream>
-#include <vector>
-#include <cmath>
-#include <algorithm>
+#include <queue>
 
 using namespace std;
 
@@ -9,19 +7,23 @@ int main() {
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
 
-    int n, length;
+    int n;
     cin >> n;
-    length = pow(n, 2);
 
-    vector<int> v(length, 0);
+    priority_queue<int, vector<int>, greater<int>> pq;
 
-    for (int i = 0; i < length; i++) {
-       cin >> v[i];
+    for (int i = 0; i < n * n; i++) {
+        int a;
+        cin >> a;
+
+        pq.push(a);
+
+        if (pq.size() > n) {
+            pq.pop();
+        }
     }
 
-    sort(v.begin(), v.end());
-
-    cout << v[length - n] << '\n';
+    cout << pq.top() << '\n';
 
     return 0;
 }
