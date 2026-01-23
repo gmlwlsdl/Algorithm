@@ -17,7 +17,21 @@ const PROMPT_TEMPLATE = (code) => `
 
 1. 전체 알고리즘의 핵심 로직 흐름을 분석하고,
    이를 Mermaid.js의 flowchart TD 문법으로 시각화하세요.
-   Mermaid 다이어그램의 노드 텍스트에는 괄호(), 수식(^, +, =), 콤마, 긴 설명을 사용하지 말고 짧고 단순한 한국어 명사구만 사용하세요.
+   오직 한글 또는 영어 단어만 사용하세요.
+   숫자, 괄호, 기호, 조사, 동사는 절대 사용하지 마세요.
+   노드 텍스트는 최대 6글자의 명사 1개만 허용됩니다.
+
+   올바른 예시:
+   A[초기화]
+   B[입력]
+   C[탐색]
+   D[조건]
+   E[출력]
+
+   잘못된 예시:
+   X[이분 탐색 시작]
+   Y[find 함수 호출]
+   Z[0번 스위치 X]
 
 2. 시간 복잡도와 공간 복잡도를
    Big-O 표기법과 함께 한국어로 간단히 설명하세요.
@@ -32,6 +46,17 @@ const PROMPT_TEMPLATE = (code) => `
 ${code}
 \`\`\`
 `
+
+function sanitizeMermaid(text) {
+  return text.replace(/\[(.*?)\]/g, (_, content) => {
+    const safe = content
+      .replace(/[0-9()^+=,]/g, '')
+      .replace(/\s+/g, '')
+      .slice(0, 6)
+
+    return `[${safe || '노드'}]`
+  })
+}
 
 async function generateAnalysis(filePath) {
   const code = fs.readFileSync(filePath, 'utf8')
@@ -51,7 +76,7 @@ async function generateAnalysis(filePath) {
           },
         ],
       }),
-    }
+    },
   )
 
   const json = await res.json()
@@ -62,7 +87,7 @@ async function generateAnalysis(filePath) {
     return
   }
 
-  fs.writeFileSync(outputPath, text, 'utf8')
+  fs.writeFileSync(outputPath, sanitizeMermaid(text), 'utf8')
   console.log(`Generated: ${outputPath}`)
 }
 
